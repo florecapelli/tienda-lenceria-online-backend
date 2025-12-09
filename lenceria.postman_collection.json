@@ -1,0 +1,113 @@
+{
+  "info": {
+    "name": "Lenceria API",
+    "_postman_id": "talento-tech-collection-001",
+    "description": "Colección completa para probar tu backend de lencería",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://lenceria2025.vercel.app/api/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@gmail.com\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = pm.response.json();",
+              "if(json.token){",
+              "  pm.environment.set(\"token\", json.token);",
+              "  console.log(\"TOKEN GUARDADO EN EL ENVIRONMENT\");",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Obtener Productos",
+      "request": {
+        "method": "GET",
+        "url": "http://lenceria2025.vercel.app/api/products"
+      }
+    },
+    {
+      "name": "Obtener Producto por ID",
+      "request": {
+        "method": "GET",
+        "url": "http://lenceria2025.vercel.app/api/products/{{product_id}}"
+      }
+    },
+    {
+      "name": "Crear Producto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://lenceria2025.vercel.app/api/products/create",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Conjunto encaje negro\",\n  \"precio\": 15000,\n  \"stock\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = pm.response.json();",
+              "if(json.id){",
+              "  pm.environment.set(\"product_id\", json.id);",
+              "  console.log(\"ID del producto guardado automáticamente: \" + json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eliminar Producto",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "http://lenceria2025.vercel.app/api/products/{{product_id}}"
+      }
+    }
+  ]
+}
